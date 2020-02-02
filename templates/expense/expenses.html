@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-5">
+                <h4 class="card-title mb-0">Expense Chart</h4>
+                <div class="small text-muted">{{current_month_word}} {{current_year}}</div>
+            </div>
+            
+            <div class="col-sm-4 d-flex">
+            <form action="." class="form-group d-flex">
+            {% csrf_token %}
+                <input type="date" name="start" class="form-control" id=""><input type="date" class="form-control" name="end" id="">
+                <input type="submit" name="" id="" class="btn btn-bg-css3" value="Filter">
+            </form>
+            </div>
+            <div class="col-sm-3">
+                <a href="{% url 'download_expenses' start_end %} " class="btn btn-success float-right">Download</a>
+            </div> 
+        </div>
+        <div class="chart-wrapper d-flex align-items-center" style="height:300px;margin-top:40px;">
+            <canvas height="300" id="country" ></canvas>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script>
+    console.log({{paid}})
+    const graph = new Chart(document.getElementById("country"), {
+        type: 'bar',
+        data: {
+        labels: {{pay_for|safe}},
+        datasets: [
+            {
+            label: "Paid",
+            backgroundColor: "#3e95cd",
+            data: {{paid}}
+            }, {
+            label: "To Pay",
+            backgroundColor: "#8e5ea2",
+            data: {{to_pay}}
+            }
+        ]
+        },
+        options: {
+        title: {
+            display: true,
+            text: 'Budget vs Expense (Rupees)'
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+        }
+        
+    });
+</script>
+
+{% endblock content %}

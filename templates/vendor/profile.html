@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+{% load static %}
+{% block content %}
+
+<table class="table table-responsive-sm table-hover table-outline mb-0">
+    <thead class="thead-light">
+        <tr>
+            <th class="text-center">
+            <i class="fas fa-user-tag"></i>
+            </th>
+            <th>Vendor</th>
+            <th class="text-center">Role</th>
+            <th>Payment Status</th>
+            <th class="text-center">Payment Method</th>
+            <th>Last Activity</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    {% for vendor, pay, paid_on in vendor_data %}
+        <tr>
+        <!--Avatar-->
+            <td class="text-center">
+                <div class="avatar">
+                {% if vendor.photo %}
+                
+                    <img class="img-avatar" src="{{ vendor.photo.url }}" alt="">
+                {% else %}
+                    <img class="img-avatar" src="https://bowerbird-app.s3.amazonaws.com/production/uploads/publication/image/1330/small_default_profile.png" alt="">
+                {% endif %}
+                    
+                    <span class="avatar-status badge-success"></span>
+                </div>
+            </td>
+            <!--Name-->
+            <td>
+                <div>{{vendor.name}} </div>
+                <div class="small text-muted">
+                    <span>New</span> | Registered: Jan 1, 2015
+                </div>
+            </td>
+            <!--Country-->
+            <td class="text-center">
+                <span>{{vendor.connection}} </span>
+            </td>
+
+            <!--Payment Status-->
+            <td>
+                <div class="clearfix">
+                    <div class="float-left">
+                        <strong>{{pay}}%</strong>
+                    </div>
+                    <div class="float-right">
+                        <small class="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
+                    </div>
+                </div>
+                <div class="progress progress-xs">
+                    <div 
+                    {% if pay > 99 %}
+                    class="progress-bar bg-success"
+                    {% elif pay < 1 %} 
+                    class="progress-bar bg-danger"
+                    {% else %}
+                    class="progress-bar bg-warning"
+                    {% endif %}
+                    role="progressbar" style="width: {{pay}}%" aria-valuenow="{{pay}}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </td>
+            <!--Payment Method-->
+            <td class="text-center">
+                
+                <i class="fa fa-cc-mastercard" style="font-size:24px"></i>
+            </td>
+            <!--Last transation-->
+            <td>
+                <div class="small text-muted">Last login</div>
+                {% if paid_on %}
+                <strong>{{paid_on}}</strong>
+                {% else %}
+                <strong> - </strong>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}
+
+
+
+
+<!--
+credit card : <i class="fas fa-credit-card"></i>
+cash : <i class="fas fa-money-bill"></i>
+cheque: <i class="fas fa-money-check"></i>
+net banking: <i class="fas fa-wallet"></i>
+invoice: <i class="fas fa-file-invoice-dollar"></i>
+-->

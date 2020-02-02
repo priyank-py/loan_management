@@ -1,0 +1,40 @@
+{% load static %}
+
+<div class="sidebar">
+    <nav class="sidebar-nav">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard' %} ">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+                {% comment %} <span class="badge badge-primary">NEW</span> {% endcomment %}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'create_budget' %} ">
+                <i class="fas fa-wallet"></i> Budget
+                </a>
+            </li> 
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'expense' %}">
+                <i class="fas fa-money-check-alt"></i> Expense 
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'vendor_profile' %}">
+                <i class="fas fa-id-card-alt"></i> Vendors 
+                </a>
+            </li>
+            {% comment %} <li class="nav-item mt-auto">
+                <a class="nav-link nav-link-success" href="https://coreui.io" target="_top">
+                <i class="nav-icon icon-cloud-download"></i> Download CoreUI</a>
+            </li>
+            </li> {% endcomment %}
+            <li class="nav-item mt-auto">
+                <a class="nav-link nav-link-success" href="{% url 'admin:index' %} " target="_top">
+                <i class="fas fa-user-shield"></i>  
+                <strong>Admin</strong>
+                </a>
+        </ul>
+    </nav>
+    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+</div>

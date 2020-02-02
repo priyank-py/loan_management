@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-5">
+                <h4 class="card-title mb-0">Budget Chart</h4>
+                <div class="small text-muted">{{current_month_word}} {{current_year}}</div>
+            </div>
+            
+            <div class="col-sm-4 d-flex">
+            <form action="." class="form-group d-flex">
+            {% csrf_token %}
+                <input type="date" name="start" class="form-control" id=""><input type="date" class="form-control" name="end" id="">
+                <input type="submit" name="" id="" class="btn btn-bg-css3" value="Filter">
+            </form>
+            </div>
+            <div class="col-sm-3">
+                <a href="{% url 'download_budget' start_end %}" class="btn btn-success float-right">Download</a>
+            </div> 
+        </div>
+        <div class="chart-wrapper d-flex align-items-center" style="height:300px;margin-top:40px;">
+            <canvas height="300" id="budget" ></canvas>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script>
+
+   const graph = new Chart(document.getElementById("budget"), {
+    type: 'bar',
+    data: {
+      labels: {{budget_label|safe}},
+      datasets: [
+        {
+          label: "budget",
+          backgroundColor: "#3e95cd",
+          data: {{amount}}
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Budget (in Rupees)'
+      },
+      scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true
+            }
+        }]
+    }
+    }
+    
+});
+</script>
+{% endblock content %}

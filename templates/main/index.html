@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+{% block content %}
+    <div class="row">
+
+<script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js" type="text/javascript"></script>
+  <!-- first box -->
+      <div class="col-sm-6 col-lg-3">
+        <div class="card text-white bg-primary">
+          <div class="card-body pb-0">
+            <div class="btn-group float-right">
+              <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="icon-settings"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+            <div class="text-value">{{total_month.amount__sum}}</div>
+            <div>Month's Budget</div>
+          </div>
+          <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+            <canvas class="chart" id="card-chart1" height="70"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- second box /.col--> 
+      <div class="col-sm-6 col-lg-3">
+        <div class="card text-white bg-info">
+          <div class="card-body pb-0">
+            <button class="btn btn-transparent p-0 float-right" type="button">
+              <i class="icon-location-pin"></i>
+            </button>
+            <div class="text-value">{{budget_next_seven_days.amount__sum}} </div>
+            <div>Upcomming Budget</div>
+          </div>
+          <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+            <canvas class="chart" id="card-chart2" height="70"></canvas>
+          </div>
+        </div>
+      </div>
+      <!-- /.col-->
+      <div class="col-sm-6 col-lg-3">
+        <div class="card text-white bg-warning">
+          <div class="card-body pb-0">
+            <div class="btn-group float-right">
+              <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="icon-settings"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+            <div class="text-value"> {{expenses_so_far}} </div>
+            <div>Expense This month</div>
+          </div>
+          <div class="chart-wrapper mt-3" style="height:70px;">
+            <canvas class="chart" id="card-chart3" height="70"></canvas>
+          </div>
+        </div>
+      </div>
+      <!-- /.col-->
+      <div class="col-sm-6 col-lg-3">
+        <div class="card text-white bg-danger">
+          <div class="card-body pb-0">
+            <div class="btn-group float-right">
+              <button class="btn btn-transparent dropdown-toggle p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="icon-settings"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+            <div class="text-value">{{ expenses_past_seven_days }} </div>
+            <div>Expenses last week </div>
+          </div>
+          <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+            <canvas class="chart" id="card-chart4" height="70"></canvas>
+          </div>
+        </div>
+      </div>
+      <!-- /.col-->
+    </div>
+    <!-- /.row-->
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-5">
+            <h4 class="card-title mb-0">Budget Chart</h4>
+            <div class="small text-muted">{{current_month_word}} {{current_year}}</div>
+          </div>
+          <!-- /.col-->
+          <div class="col-sm-7 d-none d-md-block">
+            <button class="btn btn-primary float-right" type="button">
+              <i class="icon-cloud-download"></i>
+            </button>
+            <div class="btn-group btn-group-toggle float-right mr-3" data-toggle="buttons">
+              <label class="btn btn-outline-secondary">
+                <input id="option1" type="radio" name="options" autocomplete="off"> Day
+              </label>
+              <label class="btn btn-outline-secondary active">
+                <input id="option2" type="radio" name="options" autocomplete="off" checked=""> Month
+              </label>
+              <label class="btn btn-outline-secondary">
+                <input id="option3" type="radio" name="options" autocomplete="off"> Year
+              </label>
+            </div>
+          </div>
+          <!-- /.col-->
+        </div>
+        <!-- /.row-->
+        <div class="chart-wrapper d-flex align-items-center" style="height:300px;margin-top:40px;">
+          
+          <canvas height="300" id="country" ></canvas>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="row text-center">
+        
+          {% for expense, exdata in all_incomplete.items %}
+          <div class="col-sm-12 col-md mb-sm-2 mb-0">
+            <div class="text-muted">{{ expense.budget.title|title }} </div>
+            <strong>Paid {{exdata.0.amount_paid__sum}} ({{exdata.1}}%)</strong><br>
+            {% if exdata.1 < 100 %}
+            <strong>Next Pay date {{exdata.2}} </strong>
+            {% endif %}
+            <div class="progress progress-xs mt-2">
+              <div 
+              {% if exdata.1 > 99 %}
+               class="progress-bar bg-success" 
+              {% elif exdata.1 < 1 %}
+              class="progress-bar bg-danger" 
+              {% else %}
+              class="progress-bar bg-warning" 
+              {% endif %}
+               role="progressbar" style="width: {{exdata.1}}%" aria-valuenow="{{exdata.1}}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+          {% endfor %}
+         
+
+        </div>
+      </div>
+    </div>
+    <!-- /.card-->
+    
+   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+ <script>
+   const graph = new Chart(document.getElementById("country"), {
+    type: 'bar',
+    data: {
+      labels: {{budget_labels|safe}},
+      datasets: [
+        {
+          label: "Budget",
+          backgroundColor: "#3e95cd",
+          data: {{budget_amount}}
+        }, {
+          label: "Expense",
+          backgroundColor: "#8e5ea2",
+          data: {{budget_expense}}
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Budget vs Expense (Rupees)'
+      }
+    }
+});
+
+
+ 
+ </script>
+        <script>
+      var ctx = document.getElementById('main-Chart').getContext('2d');
+      var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: 'line',
+
+          // The data for our dataset
+          data: {
+              labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+              datasets: [{
+                  label: 'My First dataset',
+                  backgroundColor: 'rgb(255, 99, 132)',
+                  borderColor: 'rgb(255, 99, 132)',
+                  data: [0, 10, 5, 2, 20, 30, 45]
+              }]
+          },
+
+          // Configuration options go here
+          options: {}
+});
+</script>
+
+
+
+{% endblock content %}
