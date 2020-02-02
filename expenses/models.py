@@ -25,12 +25,12 @@ class Expense(models.Model):
     # def get_absolute_url(self):
     #     return reverse("Expense_detail", kwargs={"pk": self.pk})
     
-    def save(self, *args, **kwargs):
-        msg = EmailMessage('Expense is added!', f'Expense for {self.expense_type} have been made to {self.vendor.name}\n\nRemarks:{self.purpose}', 'factscred@gmail.com', ['priyank7137@gmail.com'])
-        msg.content_subtype = "html" 
-        msg.send()
+    # def save(self, *args, **kwargs):
+    #     msg = EmailMessage('Expense is added!', f'Expense for {self.expense_type} have been made to {self.vendor.name}\n\nRemarks:{self.purpose}', 'factscred@gmail.com', ['priyank7137@gmail.com'])
+    #     msg.content_subtype = "html" 
+    #     msg.send()
 
-        super(Expense, self).save(*args, **kwargs)
+    #     super(Expense, self).save(*args, **kwargs)
     
 
 
