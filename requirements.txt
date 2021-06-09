@@ -1,4 +1,4 @@
-Django==2.2.8
+Django==2.2.22
 django-admin-daterange-filter==0.1.3
 django-admin-rangefilter==0.5.1
 django-ajax-selects==1.7.1
